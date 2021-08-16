@@ -1,0 +1,146 @@
+﻿<Window x:Class="ZenitV2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZenitV2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+
+        <Grid Grid.Column="1">
+            <StackPanel Width="100" HorizontalAlignment="Right">
+                <TextBox  Height="24" Width="100" HorizontalAlignment="Right" Margin="0 100 0 0"  Text="{Binding Zone}"/>
+                <ComboBox ItemsSource="{Binding AllowedCountOfSymbols}" SelectedItem="{Binding SelectedCountOfSymbols}" SelectionChanged="ComboBox_SelectionChanged"/>
+                <Button Command="{Binding ShowName}" Height="24" Width=" 100" HorizontalAlignment="Right"/>
+
+            </StackPanel>
+        </Grid>
+
+        <TabControl Grid.Column="0">
+            <TabItem Header="Ср знач">
+                <ListView  ItemsSource="{Binding Input}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ListView ItemsSource="{Binding}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Width="400">
+                                            <TextBlock Text="{Binding Name}" Margin="2"/>
+                                            <TextBlock Text="{Binding North}" Margin="2"/>
+                                            <TextBlock Text="{Binding East}" Margin="2"/>
+                                            <TextBlock Text="{Binding Height}" Margin="2" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </TabItem>
+            <TabItem Header="SK42">
+                <ListView  ItemsSource="{Binding SK42}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="{Binding Name}" Margin="2"/>
+                                <TextBlock Text="{Binding X}" Margin="2"/>
+                                <TextBlock Text="{Binding Y}" Margin="2"/>
+                                <TextBlock Text="{Binding B}" Margin="2"/>
+                                <TextBlock Text="{Binding L}" Margin="2" />
+                                <TextBlock Text="{Binding H}" Margin="2" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </TabItem>
+            <TabItem Header="PZ90">
+                <ListView  ItemsSource="{Binding PZ90}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="{Binding Name}" Margin="2"/>
+                                <TextBlock Text="{Binding X}" Margin="2"/>
+                                <TextBlock Text="{Binding Y}" Margin="2"/>
+                                <TextBlock Text="{Binding Z}" Margin="2"/>
+                                <TextBlock Text="{Binding B}" Margin="2"/>
+                                <TextBlock Text="{Binding L}" Margin="2" />
+                                <TextBlock Text="{Binding H}" Margin="2" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </TabItem>
+            <TabItem Header="Мередиан">
+                <DataGrid ItemsSource="{Binding Meredian}" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Объект" Binding="{Binding Name}" />
+                        <DataGridTextColumn Header="B" Binding="{Binding B}"/>
+                        <DataGridTextColumn Header="L" Binding="{Binding L}"/>
+                        <DataGridTextColumn Header="L-L0" Binding="{Binding L_L0}"/>
+                        <DataGridTextColumn Header="TG(L-L0)" Binding="{Binding TgL_L0}"/>
+                        <DataGridTextColumn Header="sin(B)" Binding="{Binding SinB}"/>
+                        <DataGridTextColumn Header="TG(ɣ)" Binding="{Binding TgY}"/>
+                        <DataGridTextColumn Header="ɣ" Binding="{Binding Ynn}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="Угол сближения ск42">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <Grid.Resources>
+                            <Style TargetType="ComboBox" >
+                                <Setter Property="Width" Value="120"/>
+                                <Setter Property="Height" Value="24"/>
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </Grid.Resources>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                            <TextBlock Text="Точка 1" VerticalAlignment="Center" Margin="20 0 5 0" />
+                            <ComboBox ItemsSource="{Binding SK42PointsPointsForDirectAngle}" DisplayMemberPath="Name"  SelectedItem="{Binding SK42SelectedPoint1}"/>
+                            <TextBlock Text="Точка 2" VerticalAlignment="Center" Margin="20 0 5 0" />
+                            <ComboBox ItemsSource="{Binding SK42PointsPointsForDirectAngle}" DisplayMemberPath="Name" SelectedItem="{Binding SK42SelectedPoint2}"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="100 28 0 0"  >
+                            <Button Width="100" Height="24" Margin="5" Content="Добавить" Command="{Binding AddNewDirectAngleCommand}"/>
+                            <Button Width="100" Height="24" Margin="5" Content="Удалить"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <DataGrid ItemsSource="{Binding SK42Direct}" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название пункта" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="X" Binding="{Binding X}"/>
+                                <DataGridTextColumn Header="Y" Binding="{Binding Y}"/>
+                                <DataGridTextColumn Header="Дирекционный угол" Binding="{Binding DirectAngle}"/>
+                                <DataGridTextColumn Header="Сближение меридианов" Binding="{Binding Meredian}"/>
+                                <DataGridTextColumn Header="Азимут" Binding="{Binding Azimut}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+    </Grid>
+
+</Window>
